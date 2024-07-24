@@ -1,0 +1,54 @@
+{
+  "name": "remix-template",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "Remix SPA Starter Template",
+  "sideEffects": false,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": "please use pnpm",
+    "yarn": "pleare use pnpm"
+  },
+  "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e",
+  "scripts": {
+    "build": "remix vite:build",
+    "dev": "remix vite:dev",
+    "start": "remix-serve ./build/server/index.js",
+    "typecheck": "tsc",
+    "lint": "biome check .",
+    "fix": "biome check . --write",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gen:openapi": "openapi-typescript ./backend_sample/openapi.yaml -o app/generated/openapi/schema.ts"
+  },
+  "dependencies": {
+    "@remix-run/node": "2.10.3",
+    "@remix-run/react": "2.10.3",
+    "@remix-run/serve": "2.10.3",
+    "openapi-fetch": "0.10.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tailwind-variants": "0.2.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@remix-run/dev": "2.10.3",
+    "@remix-run/testing": "2.10.3",
+    "@tailwindcss/container-queries": "0.1.1",
+    "@testing-library/jest-dom": "6.4.8",
+    "@testing-library/react": "16.0.0",
+    "@testing-library/user-event": "14.5.2",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.19",
+    "happy-dom": "14.12.3",
+    "lefthook": "1.7.6",
+    "openapi-typescript": "7.1.0",
+    "postcss": "8.4.39",
+    "tailwindcss": "3.4.6",
+    "typescript": "5.5.4",
+    "vite": "5.3.4",
+    "vitest": "2.0.4"
+  }
+}

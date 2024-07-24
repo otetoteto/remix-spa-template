@@ -1,0 +1,40 @@
+{
+	// Format
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"quickfix.biome": "explicit",
+		"source.organizeImports.biome": "explicit",
+		"source.removeUnusedImports": "explicit"
+	},
+	// tailwindcss
+	"tailwindCSS.experimental.classRegex": [
+		[
+			"tv\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)",
+		]
+	],
+	"tailwindCSS.lint.cssConflict": "ignore",
+	// Biome
+	"biome.searchInPath": false,
+	"biome.lspBin": "node_modules/@biomejs/biome/bin/biome",
+	// TypeScript
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"typescript.preferences.preferTypeOnlyAutoImports": true,
+	// each language
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
+}

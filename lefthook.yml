@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{js,jsx,ts,tsx,json}"
+      run: pnpm lint
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: pnpm typecheck
+
+post-merge:
+  commands:
+    check-package-update:
+      run: (git diff HEAD@\{1\}..HEAD --name-only | grep "pnpm-lock.yaml" > /dev/null) && (echo "npm package の更新があるのでインストールします。" & pnpm install) || echo "npm package の更新はありません。"
