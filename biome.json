@@ -29,6 +29,11 @@
     "indentStyle": "space"
   },
   "files": {
-    "ignore": ["**/.vscode/**", "app/generated/**", "**/tsconfig.json"]
+    "ignore": [
+      "**/.vscode/**",
+      "**/build/**",
+      "**/tsconfig.json",
+      "app/generated/**"
+    ]
   }
 }
