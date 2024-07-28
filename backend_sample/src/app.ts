@@ -3,6 +3,10 @@ import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 
 export const app = new OpenAPIHono();
 
+function randomSleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, Math.random() * ms));
+}
+
 const PostSchema = z
   .object({
     id: z.string(),
@@ -44,7 +48,7 @@ app.openapi(
     },
   }),
   async (c) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await randomSleep(1000);
     return c.json({ posts }, 200);
   },
 );
@@ -72,8 +76,8 @@ app.openapi(
     },
   }),
   async (c) => {
+    await randomSleep(1000);
     const { id } = c.req.valid("param");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     const post = posts.find((p) => p.id === id);
     return c.json({ post }, 200);
   },
@@ -113,6 +117,7 @@ app.openapi(
     },
   }),
   async (c) => {
+    await randomSleep(1000);
     const { id, title, content } = c.req.valid("json");
     const postId = id === "new" ? randomUUID() : id;
 

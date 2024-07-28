@@ -40,6 +40,10 @@ export const clientLoader = async ({ params }: ClientLoaderFunctionArgs) => {
   const id = params["id"];
   assertNonNullable(id);
 
+  if (id === "new") {
+    return {};
+  }
+
   const { data, error } = await httpClient.GET("/posts/{id}", {
     params: { path: { id } },
   });
