@@ -30,6 +30,13 @@ components:
         - id
         - title
         - content
+    DeletePostInput:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
   parameters: {}
 paths:
   /posts:
@@ -67,6 +74,16 @@ paths:
                     $ref: "#/components/schemas/Post"
                 required:
                   - post
+    delete:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeletePostInput"
+      responses:
+        "204":
+          description: Retrieve the user
   /posts/{id}:
     get:
       parameters:

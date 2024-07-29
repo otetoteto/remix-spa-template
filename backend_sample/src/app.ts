@@ -17,14 +17,14 @@ const PostSchema = z
 
 type Post = z.infer<typeof PostSchema>;
 
-const posts: Post[] = [
+let posts: Post[] = [
   {
-    id: "1",
+    id: randomUUID(),
     title: "Hello World",
     content: "This is a sample post",
   },
   {
-    id: "2",
+    id: randomUUID(),
     title: "Another Post",
     content: "This is another sample post",
   },
@@ -131,5 +131,39 @@ app.openapi(
     }
 
     return c.json({ post }, 200);
+  },
+);
+
+app.openapi(
+  createRoute({
+    method: "delete",
+    path: "/posts",
+    request: {
+      body: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: z
+              .object({
+                id: z.string(),
+              })
+              .openapi("DeletePostInput"),
+          },
+        },
+      },
+    },
+    responses: {
+      204: {
+        description: "Retrieve the user",
+      },
+    },
+  }),
+  async (c) => {
+    await randomSleep(1000);
+    const { id } = c.req.valid("json");
+
+    posts = posts.filter((p) => p.id !== id);
+
+    return new Response(null, { status: 204 });
   },
 );

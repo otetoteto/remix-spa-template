@@ -1,7 +1,7 @@
-import { Await, defer, useLoaderData, useNavigate } from "@remix-run/react";
+import { Await, Link, defer, useLoaderData } from "@remix-run/react";
 import { Suspense } from "react";
 import { tv } from "tailwind-variants";
-import { Button } from "../../components/Button/Button";
+import { Clickable } from "../../components/Clickable/Clickable";
 import { httpClient } from "../../libs/httpClient";
 import { PostList } from "./PostList";
 
@@ -27,7 +27,6 @@ const style = tv({
 });
 
 export default function Page() {
-  const navigate = useNavigate();
   const { data } = useLoaderData<typeof clientLoader>();
 
   const { container, inner, header, heading } = style();
@@ -37,15 +36,9 @@ export default function Page() {
       <div className={inner()}>
         <div className={header()}>
           <h1 className={heading()}>Blog Posts</h1>
-          <Button
-            size="sm"
-            className="place-self-end"
-            onClick={() => {
-              navigate("/edit/new");
-            }}
-          >
-            + New Post
-          </Button>
+          <Clickable size="sm" className="place-self-end">
+            <Link to="/edit/new">+ New Post</Link>
+          </Clickable>
         </div>
         <Suspense
           fallback={<p className="p-8 text-lg text-slate-300">loading...</p>}

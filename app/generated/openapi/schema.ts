@@ -60,7 +60,28 @@ export interface paths {
                 };
             };
         };
-        delete?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DeletePostInput"];
+                };
+            };
+            responses: {
+                /** @description Retrieve the user */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -118,6 +139,9 @@ export interface components {
             id: string;
             title: string;
             content: string;
+        };
+        DeletePostInput: {
+            id: string;
         };
     };
     responses: never;

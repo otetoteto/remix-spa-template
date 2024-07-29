@@ -2,43 +2,51 @@ import {
   type ClientActionFunctionArgs,
   type ClientLoaderFunctionArgs,
   Form,
+  json,
   redirect,
   useLoaderData,
+  useNavigation,
 } from "@remix-run/react";
 import { tv } from "tailwind-variants";
-import { Button } from "../../components/Button/Button";
-import { useFormItem } from "../../hooks/useFormItem";
+import * as v from "valibot";
+import { useStore } from "zustand";
+import { Clickable } from "../../components/Clickable/Clickable";
 import { httpClient } from "../../libs/httpClient";
-import { assertNonNullable } from "../../utils/assert";
+import * as postSchema from "../../libs/validation/post";
+import { ContentInput } from "./ContentInput";
+import { TitleInput } from "./TitleInput";
+import {
+  PostFormStoreProvider,
+  postFormValidSelector,
+  usePostFormStore,
+} from "./usePostFormStore";
 
 export const clientAction = async ({
   request,
   params,
 }: ClientActionFunctionArgs) => {
-  const body = await request.formData();
+  const formData = await request.formData();
 
-  // biome-ignore lint/complexity/useLiteralKeys: <explanation>
-  const id = params["id"];
-  const title = body.get("title")?.toString();
-  const content = body.get("content")?.toString();
-  assertNonNullable(id);
-  assertNonNullable(title);
-  assertNonNullable(content);
+  try {
+    const body = v.parse(postSchema.validator, {
+      // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+      id: params["id"],
+      title: formData.get("title")?.toString(),
+      content: formData.get("content")?.toString(),
+    });
 
-  await httpClient.POST("/posts", {
-    body: {
-      id,
-      title,
-      content,
-    },
-  });
-  return redirect("/");
+    await httpClient.POST("/posts", {
+      body,
+    });
+    return redirect("/");
+  } catch (error) {
+    return json({ error }, 400);
+  }
 };
 
 export const clientLoader = async ({ params }: ClientLoaderFunctionArgs) => {
   // biome-ignore lint/complexity/useLiteralKeys: <explanation>
-  const id = params["id"];
-  assertNonNullable(id);
+  const id = v.parse(postSchema.idSchema, params["id"]);
 
   if (id === "new") {
     return {};
@@ -61,50 +69,41 @@ const style = tv({
       "rounded-md border border-slate-300 bg-slate-400",
     heading: "font-bold text-2xl",
     form: "grid w-full gap-4",
-    title:
-      "border-slate-500 border-b-2 bg-inherit px-1 text-lg leading-6 outline-none " +
-      "font-semibold focus-visible:border-emerald-600",
-    content:
-      "min-h-56 resize-none rounded border-2 border-slate-500 bg-inherit p-1 text-lg leading-6 " +
-      "font-semibold outline-none focus-visible:border-emerald-600",
   },
 });
 
 export default function Page() {
-  const { container, formContainer, heading, form, title, content } = style();
-
-  const [titleId, renderTitleForm] = useFormItem();
-  const [contentId, renderContentForm] = useFormItem();
-
+  const { container, formContainer, heading, form } = style();
   const { post } = useLoaderData<typeof clientLoader>();
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== "idle";
 
   return (
     <div className={container()}>
       <div className={formContainer()}>
         <h1 className={heading()}>Write Post</h1>
-        <Form className={form()} method="post">
-          {renderTitleForm(
-            "Title",
-            <input
-              type="text"
-              name="title"
-              id={titleId}
-              className={title()}
-              defaultValue={post?.title}
-            />,
-          )}
-          {renderContentForm(
-            "Content",
-            <textarea
-              name="content"
-              id={contentId}
-              className={content()}
-              defaultValue={post?.content}
-            />,
-          )}
-          <Button type="submit">Post</Button>
-        </Form>
+        <PostFormStoreProvider initialState={post ?? {}}>
+          <Form className={form()} method="post">
+            <TitleInput disabled={isSubmitting} />
+            <ContentInput disabled={isSubmitting} />
+            <Submit isSubmitting={isSubmitting} />
+          </Form>
+        </PostFormStoreProvider>
       </div>
     </div>
+  );
+}
+
+function Submit({ isSubmitting }: { isSubmitting: boolean }) {
+  const store = usePostFormStore();
+  const isValid = useStore(store, postFormValidSelector);
+
+  return (
+    <Clickable>
+      <button type="submit" disabled={isSubmitting || !isValid}>
+        Post
+      </button>
+    </Clickable>
   );
 }
