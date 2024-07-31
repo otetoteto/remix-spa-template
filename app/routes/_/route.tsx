@@ -3,7 +3,7 @@ import { tv } from "tailwind-variants";
 
 const style = tv({
   slots: {
-    container: "min-h-screen bg-slate-800",
+    container: "min-h-screen",
   },
 });
 

@@ -34,7 +34,7 @@ export function ContentInput({ disabled }: Props) {
   const setContent = useStore(store, (s) => s.setContent);
 
   return renderContentForm(
-    "Title",
+    "Content",
     <div className={box()}>
       <textarea
         name="content"

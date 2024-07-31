@@ -26,6 +26,7 @@ export const clientAction = async ({
   params,
 }: ClientActionFunctionArgs) => {
   const formData = await request.formData();
+  console.log("ACTION", "++++++++++++++++++++++++++++++++++++++");
 
   try {
     const body = v.parse(postSchema.validator, {

@@ -32,6 +32,8 @@
     "ignore": [
       "**/.vscode/**",
       "**/build/**",
+      "**/public/**",
+      "**/test-results/**",
       "**/tsconfig.json",
       "app/generated/**"
     ]
