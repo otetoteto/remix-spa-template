@@ -11,7 +11,7 @@ export class AssertError extends Error {
 export function assertNonNullable<T>(
   condition: T | null | undefined,
   message = "値は null または undefined であってはなりません",
-): asserts condition {
+): asserts condition is T {
   if (condition == null) {
     throw new AssertError(message);
   }
